@@ -1,6 +1,13 @@
 package es.sergio.mateos.killthemole;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.util.Duration;
+
 public class LogicaInterna {
+    
+    
     
     short tamXTablero;
     short tamYTablero;
@@ -8,6 +15,11 @@ public class LogicaInterna {
     final char JUGADOR1 = 'T';
     final char JUGADOR2 = '2';
     final char VACIO = '.';
+    int posColumna = 0;
+    int posFila = 0;
+    boolean colocado = true;
+    int posicionXTopo = 0;
+    int posicionYTopo = 0;
     
     //Método constructor
     public LogicaInterna(){
@@ -76,5 +88,25 @@ public class LogicaInterna {
         }
         return fila - 1;
     }
+    
+    
+    
+    public int[] obtenerPosicionTopo(){
+        int[] posMoleArr = new int[2];
+        for(int x=0;x<tamXTablero;x++){
+            for(int y=0;y<tamYTablero;y++){
+                if(tablero[x][y]==JUGADOR1){
+                    posMoleArr[0]=x;
+                    posMoleArr[1]=y;
+                    System.out.println("La posicion x almacenada es: "+x);
+                    System.out.println("La posicion y almacenada es: "+y);
+                    posicionXTopo = posMoleArr[0];
+                    posicionYTopo = posMoleArr[1];
+                }
+            }
+        }
+        return (posMoleArr);
+    }
+    
 }
 

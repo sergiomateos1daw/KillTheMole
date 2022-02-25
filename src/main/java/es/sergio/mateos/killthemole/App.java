@@ -31,27 +31,12 @@ public class App extends Application {
         stage.setScene(scene);
         stage.show();
         
-        LogicaInterna cuatroEnRaya = new LogicaInterna((short)10,(short)7);
-        Tablero tablero = new Tablero();
+        LogicaInterna logicaInterna = new LogicaInterna((short)3,(short)4);
+        LogicaGrafica logicaGrafica = new LogicaGrafica();
         
-        tablero.dibujarPradera(root);
-        
-        
-        Timeline generarTopo = new Timeline(
-                  new KeyFrame(Duration.seconds(1), (ActionEvent ae) -> {
-                        colocado = cuatroEnRaya.colocarFicha(posColumna, posFila, 2);
-                        posColumna = (int) (Math.random() * (9 -0)) + 0;
-                        posFila = (int) (Math.random() * (6 -0)) + 0;
-                        colocado = cuatroEnRaya.colocarFicha(posColumna, posFila, 1);
-                        if(colocado == true) {
-                            cuatroEnRaya.mostrarTableroConsola();
-        }
-                  })
-          );
-          
-          generarTopo.setCycleCount(Timeline.INDEFINITE); // DEFINIR QUE SE EJECUTE INDEFINIDAMENTE
-          generarTopo.play(); // EJECUTAR EL TIMELINE
-        
+        logicaGrafica.dibujarPradera(root);
+        logicaGrafica.scrollCielo();
+        logicaGrafica.generarTopo();
         
         
     }
