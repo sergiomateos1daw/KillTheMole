@@ -1,10 +1,5 @@
 package es.sergio.mateos.killthemole;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.util.Duration;
-
 public class LogicaInterna {
     
     

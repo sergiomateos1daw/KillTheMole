@@ -38,7 +38,6 @@ public class App extends Application {
         logicaGrafica.scrollCielo();
         logicaGrafica.generarTopo();
         
-        
     }
 
     public static void main(String[] args) {

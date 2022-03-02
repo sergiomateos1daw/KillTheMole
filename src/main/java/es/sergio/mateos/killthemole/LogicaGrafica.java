@@ -74,12 +74,14 @@ public class LogicaGrafica {
     double topoPosY = 260;
     double posEsperada;
     int velocidadTopo = 0;
-    int contadorAnimacionTopo = 0;
+    int contadorAnimacion=0;
     boolean continuarAnimacion = true;
     
     boolean colocado = true;
     int posColumna = 0;
     int posFila = 0;
+    
+    Timeline animacion;
     ///////////////
     
     public void dibujarPradera(Pane root){
@@ -187,84 +189,80 @@ public class LogicaGrafica {
     }
     
     public void animacionTopo(){
-        velocidadTopo = -1;
-        contadorAnimacionTopo = 0;
-        Timeline movimientoVerticalTopo = new Timeline(
-            new KeyFrame(Duration.seconds(0.017), (ActionEvent ae) -> {
-                if(contadorAnimacionTopo==29){
-                    velocidadTopo = 1;
-                }
-                if(contadorAnimacionTopo==1){
-                    velocidadTopo = -1;
-                }
-                if(continuarAnimacion==true){
-                    if(velocidadTopo == -1){
-                        topoPosY = topoPosY - 2;
-                        topo.setLayoutY(topoPosY);
-                        contadorAnimacionTopo++;
-                    }
-                    if(velocidadTopo == 1){
-                        topoPosY = topoPosY + 2;
-                        topo.setLayoutY(topoPosY);
-                        contadorAnimacionTopo--;
-                        if(contadorAnimacionTopo==1){
-                            continuarAnimacion = false;
-                        }
-                    }
-                }
-            })
+        velocidadTopo = 1;
+        contadorAnimacion = 0;
+        animacion = new Timeline(
+                  new KeyFrame(Duration.seconds(0.017), (ActionEvent ae) -> {
+                        ejecutarAnimacionTopo();
+                  })
         );
-          
-        movimientoVerticalTopo.setCycleCount(Timeline.INDEFINITE); // DEFINIR QUE SE EJECUTE INDEFINIDAMENTE
-        movimientoVerticalTopo.play(); // EJECUTAR EL TIMELINE
+        animacion.setCycleCount(Timeline.INDEFINITE); // DEFINIR QUE SE EJECUTE INDEFINIDAMENTE
+        animacion.play(); // EJECUTAR EL TIMELINE
     }
+    public void ejecutarAnimacionTopo(){
+        contadorAnimacion++;
+        if (contadorAnimacion==70)
+        {
+            velocidadTopo = 0;
+            animacion.stop();
+        }
+        if (contadorAnimacion==30)
+        {
+            velocidadTopo = -1;
+        }
+        if (velocidadTopo == 1)
+        {
+            topoPosY = topoPosY - 1;
+            topo.setLayoutY(topoPosY);
+            System.out.println("realiza animacion");
+        }
+        if (velocidadTopo == -1)
+        {
+            topoPosY = topoPosY + 1;
+            topo.setLayoutY(topoPosY);
+        }
+    }
+    
     
     public void changeMoleImgPosition(){
         int posicionXTopo = logicaInterna.obtenerPosicionTopo()[0];
         int posicionYTopo = logicaInterna.obtenerPosicionTopo()[1];
-        animacionTopo();
         if(posicionXTopo==0){
-            topoPosX = 10;
+            topoPosX = 30;
             topo.setLayoutX(topoPosX);
             System.out.println("te cambio la X a: "+topoPosX);
-//            animacionTopo();
         }
         if(posicionXTopo==1){
-            topoPosX = 130;
+            topoPosX = 155;
             topo.setLayoutX(topoPosX);
             System.out.println("te cambio la X a: "+topoPosX);
-//            animacionTopo();
         }
         if(posicionXTopo==2){
-            topoPosX = 255;
+            topoPosX = 285;
             topo.setLayoutX(topoPosX);
             System.out.println("te cambio la X a: "+topoPosX);
-//            animacionTopo();
         }
         if(posicionYTopo==0){
             topoPosY = 250;
             topo.setLayoutY(topoPosY);
             System.out.println("te cambio la Y a: "+topoPosY);
-//            animacionTopo();
         }
         if(posicionYTopo==1){
             topoPosY = 340;
             topo.setLayoutY(topoPosY);
             System.out.println("te cambio la Y a: "+topoPosY);
-//            animacionTopo();
         }
         if(posicionYTopo==2){
             topoPosY = 430;
             topo.setLayoutY(topoPosY);
             System.out.println("te cambio la Y a: "+topoPosY);
-//            animacionTopo();
         }
         if(posicionYTopo==3){
             topoPosY = 525;
             topo.setLayoutY(topoPosY);
             System.out.println("te cambio la Y a: "+topoPosY);
-//            animacionTopo();
         }
+        animacionTopo();
     }
     
 }
