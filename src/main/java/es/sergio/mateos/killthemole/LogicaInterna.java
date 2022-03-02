@@ -1,9 +1,6 @@
 package es.sergio.mateos.killthemole;
 
 public class LogicaInterna {
-    
-    
-    
     short tamXTablero;
     short tamYTablero;
     char[][] tablero;

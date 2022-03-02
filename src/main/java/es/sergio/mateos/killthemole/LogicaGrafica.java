@@ -3,9 +3,16 @@ package es.sergio.mateos.killthemole;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
+import javafx.event.EventType;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
 
 public class LogicaGrafica {
@@ -66,29 +73,59 @@ public class LogicaGrafica {
     ImageView suelo10Topo;
     ImageView suelo11Topo;
     ImageView suelo12Topo;
+    ImageView fondoScore;
+    
+    Label labelPuntos; // AÑADIMOS EL OBJETO LABELPUNTOS
     
     // VARIABLES //
     double cielo1PosX = 0;
     double cielo2PosX = 400;
     double topoPosX = 35;
     double topoPosY = 260;
-    double posEsperada;
-    int velocidadTopo = 0;
+    double fondoScorePosX = 10;
+    double fondoScorePosY = 10;
+    int direccionTopo = 0;
+//    double velocidadTopo = 2;
+//    double limite1AnimacionTopo = 15;
+//    double limite2AnimacionTopo = 35;
+    double velocidadTopo = 1;
+    double limite1AnimacionTopo = velocidadTopo * 30;
+    double limite2AnimacionTopo = velocidadTopo * 70;
     int contadorAnimacion=0;
     boolean continuarAnimacion = true;
+    boolean permitirPulsacion = true;
     
     boolean colocado = true;
     int posColumna = 0;
     int posFila = 0;
+    int puntos = 0;
     
     Timeline animacion;
     ///////////////
+    
+    public void crearLabelPuntos(Pane root){ // ESTE METODO CREA LOS TEXTOS QUE VAMOS A VER EN PANTALLA Y NOS DICEN LAS PUNTUACIÓN EN EL JUEGO
+        labelPuntos = new Label(""+puntos); // ESTO MUESTRA EN PANATALLA LOS PUTNOS ACUTALES
+        Font font = Font.loadFont("file:resources/fonts/go3v2.ttf", 25);
+        font = Font.font("Gang Of Three Normal", FontWeight.BOLD, FontPosture.REGULAR, 25); // ESTABLECEMOS ALGUNAS DE LAS PROPIEDADES DE LA FUENTE DEL TEXTO
+        labelPuntos.setFont(font); // CON ESTO LE APLICAMOS LAS POPIEDADES DE LA FUENTE AL TEXTO
+        labelPuntos.setTextFill(Color.rgb(65, 45, 42)); // CAMBIA EL COLOR DEL TEXTO A NEGRO
+        labelPuntos.setTranslateX(105); // CAMBIA LAS COORDENADAS X DEL TEXTO
+        labelPuntos.setTranslateY(26); // CAMBIA LAS COORDENADAS Y DEL TEXTO
+        root.getChildren().add(labelPuntos); // AÑADE EL TEXTO LABELPUTNOS AL ROOT
+    }
+    
+    private void cambiarLabelPuntos(){ // ESTE METODO ACTUALIZA EL LABEL DE PUTNOS QUE SE MUESTRA EN LA PANTALLA DURANTE LA PARTIDA
+        
+        labelPuntos.setText(""); // PRIMERO BORRAMOS EL TEXTO QUE YA SE ESTABA MOSTRANDO
+        labelPuntos.setText(""+puntos); // Y ESCRIBIMOS EL TEXTO NUEVO, CON LA PUNTUACION ACTUALIZADA
+    }
     
     public void dibujarPradera(Pane root){
         Image cieloImg = new Image(getClass().getResourceAsStream("/images/cielo.png")); // CARGA LA IMAGEN DE FONDO
         Image praderaImg = new Image(getClass().getResourceAsStream("/images/pradera.png")); // CARGA LA IMAGEN DE FONDO
         Image topoImg = new Image(getClass().getResourceAsStream("/images/topo.png")); // CARGA LA IMAGEN DEL TOPO
-        Image sueloTopoImg = new Image(getClass().getResourceAsStream("/images/agujero.png")); // CARGA LA IMAGEN DEL TOPO
+        Image sueloTopoImg = new Image(getClass().getResourceAsStream("/images/agujero.png")); // CARGA LA IMAGEN DEL AGUJERO
+        Image fondoScoreImg = new Image(getClass().getResourceAsStream("/images/imageScore140x70.png")); // CARGA LA IMAGEN DEL FONDO DE LA PUNTUACION
         cielo1 = new ImageView(cieloImg); // CREA EL OBJETO cielo1
         cielo2 = new ImageView(cieloImg); // CREA EL OBJETO cielo2
         pradera = new ImageView(praderaImg); // CREA EL OBJETO pradera
@@ -105,6 +142,8 @@ public class LogicaGrafica {
         suelo10Topo = new ImageView(sueloTopoImg); // CREA EL OBJETO sueloTopo
         suelo11Topo = new ImageView(sueloTopoImg); // CREA EL OBJETO sueloTopo
         suelo12Topo = new ImageView(sueloTopoImg); // CREA EL OBJETO sueloTopo
+        suelo12Topo = new ImageView(sueloTopoImg); // CREA EL OBJETO sueloTopo
+        fondoScore = new ImageView(fondoScoreImg); // CREA EL OBJETO sueloTopo
         root.getChildren().add(cielo1);
         root.getChildren().add(cielo2);
         root.getChildren().add(pradera);
@@ -121,6 +160,7 @@ public class LogicaGrafica {
         root.getChildren().add(suelo10Topo);
         root.getChildren().add(suelo11Topo);
         root.getChildren().add(suelo12Topo);
+        root.getChildren().add(fondoScore);
         cielo1.setLayoutX(cielo1PosX);
         cielo2.setLayoutX(cielo2PosX);
         topo.setLayoutX(topoPosX);
@@ -149,6 +189,18 @@ public class LogicaGrafica {
         suelo11Topo.setLayoutY(suelo11TopoPosY);
         suelo12Topo.setLayoutX(suelo12TopoPosX);
         suelo12Topo.setLayoutY(suelo12TopoPosY);
+        fondoScore.setLayoutX(fondoScorePosX);
+        fondoScore.setLayoutY(fondoScorePosY);
+        
+        topo.setOnMousePressed((MouseEvent mouseEvent) -> {
+            // Cambia el color del circulo cuando clickas en un circulo
+            if(permitirPulsacion==true){
+                puntos++;
+                cambiarLabelPuntos();
+                System.out.println("Has conseguido un punto, total: "+puntos);
+                permitirPulsacion = false;
+            }
+        });
     }
     
     public void scrollCielo(){
@@ -163,6 +215,7 @@ public class LogicaGrafica {
                 } else if(cielo2PosX <= - 400){
                     cielo2PosX = 400;
                 }
+                
             })
         );
           
@@ -181,6 +234,7 @@ public class LogicaGrafica {
                         if(colocado == true) {
                             logicaInterna.mostrarTableroConsola();
                             changeMoleImgPosition();
+                            permitirPulsacion = true;
                         }
                   })
         );
@@ -189,7 +243,7 @@ public class LogicaGrafica {
     }
     
     public void animacionTopo(){
-        velocidadTopo = 1;
+        direccionTopo = 1;
         contadorAnimacion = 0;
         animacion = new Timeline(
                   new KeyFrame(Duration.seconds(0.017), (ActionEvent ae) -> {
@@ -201,24 +255,23 @@ public class LogicaGrafica {
     }
     public void ejecutarAnimacionTopo(){
         contadorAnimacion++;
-        if (contadorAnimacion==70)
+        if (contadorAnimacion==limite2AnimacionTopo)
         {
-            velocidadTopo = 0;
+            direccionTopo = 0;
             animacion.stop();
         }
-        if (contadorAnimacion==30)
+        if (contadorAnimacion==limite1AnimacionTopo)
         {
-            velocidadTopo = -1;
+            direccionTopo = -1;
         }
-        if (velocidadTopo == 1)
+        if (direccionTopo == 1)
         {
-            topoPosY = topoPosY - 1;
+            topoPosY = topoPosY - velocidadTopo;
             topo.setLayoutY(topoPosY);
-            System.out.println("realiza animacion");
         }
-        if (velocidadTopo == -1)
+        if (direccionTopo == -1)
         {
-            topoPosY = topoPosY + 1;
+            topoPosY = topoPosY + velocidadTopo;
             topo.setLayoutY(topoPosY);
         }
     }
@@ -264,5 +317,6 @@ public class LogicaGrafica {
         }
         animacionTopo();
     }
+    
     
 }
