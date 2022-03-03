@@ -9,11 +9,6 @@ import javafx.stage.Stage;
 
 public class App extends Application {
     
-    
-    int posColumna = 0;
-    int posFila = 0;
-    boolean colocado = true;
-    
     @Override
     public void start(Stage stage) {
         
@@ -34,9 +29,9 @@ public class App extends Application {
         logicaGrafica.dibujarPradera(root);
         logicaGrafica.scrollCielo();
         logicaGrafica.generarTopo();
+        logicaGrafica.generarBomba();
         logicaGrafica.crearLabelPuntos(root);
     }
-    
     
     
     public static void main(String[] args) {

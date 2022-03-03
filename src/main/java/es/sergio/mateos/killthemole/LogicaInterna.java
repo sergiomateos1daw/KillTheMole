@@ -5,13 +5,15 @@ public class LogicaInterna {
     short tamYTablero;
     char[][] tablero;
     final char JUGADOR1 = 'T';
-    final char JUGADOR2 = '2';
+    final char BOMBA = 'B';
     final char VACIO = '.';
     int posColumna = 0;
     int posFila = 0;
     boolean colocado = true;
     int posicionXTopo = 0;
     int posicionYTopo = 0;
+    int posicionXBomba = 0;
+    int posicionYBomba = 0;
     
     //Método constructor
     public LogicaInterna(){
@@ -66,6 +68,9 @@ public class LogicaInterna {
             case 2:
                 tablero[columna][fila] = VACIO;
                 break;
+            case 3:
+                tablero[columna][fila] = BOMBA;
+                break;
         }
             return true;
         } else {
@@ -98,6 +103,23 @@ public class LogicaInterna {
             }
         }
         return (posMoleArr);
+    }
+    
+    public int[] obtenerPosicionBomba(){
+        int[] posBombArr = new int[2];
+        for(int x=0;x<tamXTablero;x++){
+            for(int y=0;y<tamYTablero;y++){
+                if(tablero[x][y]==BOMBA){
+                    posBombArr[0]=x;
+                    posBombArr[1]=y;
+                    System.out.println("La posicion x de la bomba almacenada es: "+x);
+                    System.out.println("La posicion y de la bomba almacenada es: "+y);
+                    posicionXBomba = posBombArr[0];
+                    posicionYBomba = posBombArr[1];
+                }
+            }
+        }
+        return (posBombArr);
     }
     
 }

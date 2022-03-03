@@ -61,6 +61,7 @@ public class LogicaGrafica {
     ImageView cielo2;
     ImageView pradera;
     ImageView topo;
+    ImageView bomba;
     ImageView suelo1Topo;
     ImageView suelo2Topo;
     ImageView suelo3Topo;
@@ -82,40 +83,50 @@ public class LogicaGrafica {
     double cielo2PosX = 400;
     double topoPosX = 35;
     double topoPosY = 260;
+    double bombaPosX = 35;
+    double bombaPosY = 260;
     double fondoScorePosX = 10;
     double fondoScorePosY = 10;
     int direccionTopo = 0;
+    int direccionBomba = 0;
 //    double velocidadTopo = 2;
 //    double limite1AnimacionTopo = 15;
 //    double limite2AnimacionTopo = 35;
     double velocidadTopo = 1;
     double limite1AnimacionTopo = velocidadTopo * 30;
     double limite2AnimacionTopo = velocidadTopo * 70;
-    int contadorAnimacion=0;
-    boolean continuarAnimacion = true;
-    boolean permitirPulsacion = true;
+    double velocidadBomba = 1;
+    double limite1AnimacionBomba = velocidadBomba * 30;
+    double limite2AnimacionBomba = velocidadBomba * 70;
+    int contadorAnimacionTopo=0;
+    int contadorAnimacionBomba=0;
+    boolean permitirPulsacionTopo = true;
+    boolean permitirPulsacionBomba = true;
     
-    boolean colocado = true;
-    int posColumna = 0;
-    int posFila = 0;
+    boolean colocadoTopo = true;
+    boolean colocadoBomba = true;
+    int posColumnaTopo = 0;
+    int posFilaTopo = 0;
+    int posColumnaBomba = 0;
+    int posFilaBomba = 0;
     int puntos = 0;
     
-    Timeline animacion;
+    Timeline animacionTopo;
+    Timeline animacionBomba;
     ///////////////
     
     public void crearLabelPuntos(Pane root){ // ESTE METODO CREA LOS TEXTOS QUE VAMOS A VER EN PANTALLA Y NOS DICEN LAS PUNTUACIÓN EN EL JUEGO
         labelPuntos = new Label(""+puntos); // ESTO MUESTRA EN PANATALLA LOS PUTNOS ACUTALES
-        Font font = Font.loadFont("file:resources/fonts/go3v2.ttf", 25);
-        font = Font.font("Gang Of Three Normal", FontWeight.BOLD, FontPosture.REGULAR, 25); // ESTABLECEMOS ALGUNAS DE LAS PROPIEDADES DE LA FUENTE DEL TEXTO
+        Font font = Font.loadFont(getClass().getResourceAsStream("/fonts/go3v2.ttf"), 25);
+        font = Font.font("Gang of Three", FontWeight.BOLD, FontPosture.REGULAR, 25); // ESTABLECEMOS ALGUNAS DE LAS PROPIEDADES DE LA FUENTE DEL TEXTO
         labelPuntos.setFont(font); // CON ESTO LE APLICAMOS LAS POPIEDADES DE LA FUENTE AL TEXTO
         labelPuntos.setTextFill(Color.rgb(65, 45, 42)); // CAMBIA EL COLOR DEL TEXTO A NEGRO
         labelPuntos.setTranslateX(105); // CAMBIA LAS COORDENADAS X DEL TEXTO
-        labelPuntos.setTranslateY(26); // CAMBIA LAS COORDENADAS Y DEL TEXTO
+        labelPuntos.setTranslateY(30); // CAMBIA LAS COORDENADAS Y DEL TEXTO
         root.getChildren().add(labelPuntos); // AÑADE EL TEXTO LABELPUTNOS AL ROOT
     }
     
-    private void cambiarLabelPuntos(){ // ESTE METODO ACTUALIZA EL LABEL DE PUTNOS QUE SE MUESTRA EN LA PANTALLA DURANTE LA PARTIDA
-        
+    public void actualizarLabelPuntos(){ // ESTE METODO ACTUALIZA EL LABEL DE PUTNOS QUE SE MUESTRA EN LA PANTALLA DURANTE LA PARTIDA
         labelPuntos.setText(""); // PRIMERO BORRAMOS EL TEXTO QUE YA SE ESTABA MOSTRANDO
         labelPuntos.setText(""+puntos); // Y ESCRIBIMOS EL TEXTO NUEVO, CON LA PUNTUACION ACTUALIZADA
     }
@@ -124,12 +135,14 @@ public class LogicaGrafica {
         Image cieloImg = new Image(getClass().getResourceAsStream("/images/cielo.png")); // CARGA LA IMAGEN DE FONDO
         Image praderaImg = new Image(getClass().getResourceAsStream("/images/pradera.png")); // CARGA LA IMAGEN DE FONDO
         Image topoImg = new Image(getClass().getResourceAsStream("/images/topo.png")); // CARGA LA IMAGEN DEL TOPO
+        Image bombaImg = new Image(getClass().getResourceAsStream("/images/bomba.png")); // CARGA LA IMAGEN DEL TOPO
         Image sueloTopoImg = new Image(getClass().getResourceAsStream("/images/agujero.png")); // CARGA LA IMAGEN DEL AGUJERO
         Image fondoScoreImg = new Image(getClass().getResourceAsStream("/images/imageScore140x70.png")); // CARGA LA IMAGEN DEL FONDO DE LA PUNTUACION
         cielo1 = new ImageView(cieloImg); // CREA EL OBJETO cielo1
         cielo2 = new ImageView(cieloImg); // CREA EL OBJETO cielo2
         pradera = new ImageView(praderaImg); // CREA EL OBJETO pradera
         topo = new ImageView(topoImg); // CREA EL OBJETO topo
+        bomba = new ImageView(bombaImg); // CREA EL OBJETO topo
         suelo1Topo = new ImageView(sueloTopoImg); // CREA EL OBJETO sueloTopo
         suelo2Topo = new ImageView(sueloTopoImg); // CREA EL OBJETO sueloTopo
         suelo3Topo = new ImageView(sueloTopoImg); // CREA EL OBJETO sueloTopo
@@ -148,6 +161,7 @@ public class LogicaGrafica {
         root.getChildren().add(cielo2);
         root.getChildren().add(pradera);
         root.getChildren().add(topo);
+        root.getChildren().add(bomba);
         root.getChildren().add(suelo1Topo);
         root.getChildren().add(suelo2Topo);
         root.getChildren().add(suelo3Topo);
@@ -165,6 +179,8 @@ public class LogicaGrafica {
         cielo2.setLayoutX(cielo2PosX);
         topo.setLayoutX(topoPosX);
         topo.setLayoutY(topoPosY);
+        bomba.setLayoutX(bombaPosX);
+        bomba.setLayoutY(bombaPosY);
         suelo1Topo.setLayoutX(suelo1TopoPosX);
         suelo1Topo.setLayoutY(suelo1TopoPosY);
         suelo2Topo.setLayoutX(suelo2TopoPosX);
@@ -194,11 +210,15 @@ public class LogicaGrafica {
         
         topo.setOnMousePressed((MouseEvent mouseEvent) -> {
             // Cambia el color del circulo cuando clickas en un circulo
-            if(permitirPulsacion==true){
+            if(permitirPulsacionTopo==true){
                 puntos++;
-                cambiarLabelPuntos();
+                actualizarLabelPuntos();
                 System.out.println("Has conseguido un punto, total: "+puntos);
-                permitirPulsacion = false;
+                permitirPulsacionTopo = false;
+            }
+            if(permitirPulsacionBomba==true){
+                System.out.println("Has explotado una bomba");
+                permitirPulsacionBomba = false;
             }
         });
     }
@@ -227,14 +247,14 @@ public class LogicaGrafica {
         Timeline generarTopo = new Timeline(
                   new KeyFrame(Duration.seconds(2), (ActionEvent ae) -> {
                         
-                        colocado = logicaInterna.colocarFicha(posColumna, posFila, 2);
-                        posColumna = (int) (Math.random() * (3 -0)) + 0;
-                        posFila = (int) (Math.random() * (4 -0)) + 0;
-                        colocado = logicaInterna.colocarFicha(posColumna, posFila, 1);
-                        if(colocado == true) {
+                        colocadoTopo = logicaInterna.colocarFicha(posColumnaTopo, posFilaTopo, 2);
+                        posColumnaTopo = (int) (Math.random() * (3 -0)) + 0;
+                        posFilaTopo = (int) (Math.random() * (4 -0)) + 0;
+                        colocadoTopo = logicaInterna.colocarFicha(posColumnaTopo, posFilaTopo, 1);
+                        if(colocadoTopo == true) {
                             logicaInterna.mostrarTableroConsola();
                             changeMoleImgPosition();
-                            permitirPulsacion = true;
+                            permitirPulsacionTopo = true;
                         }
                   })
         );
@@ -242,25 +262,54 @@ public class LogicaGrafica {
         generarTopo.play(); // EJECUTAR EL TIMELINE
     }
     
+    public void generarBomba(){
+        Timeline generarBomba = new Timeline(
+                  new KeyFrame(Duration.seconds(5), (ActionEvent ae) -> {
+                        colocadoBomba = logicaInterna.colocarFicha(posColumnaBomba, posFilaBomba, 2);
+                        posColumnaBomba = (int) (Math.random() * (3 -0)) + 0;
+                        posFilaBomba = (int) (Math.random() * (4 -0)) + 0;
+                        colocadoBomba = logicaInterna.colocarFicha(posColumnaBomba, posFilaBomba, 3);
+                        if(colocadoBomba == true) {
+                            logicaInterna.mostrarTableroConsola();
+                            changeBombaImgPosition();
+                            permitirPulsacionBomba = true;
+                        }
+                  })
+        );
+        generarBomba.setCycleCount(Timeline.INDEFINITE); // DEFINIR QUE SE EJECUTE INDEFINIDAMENTE
+        generarBomba.play(); // EJECUTAR EL TIMELINE
+    }
+    
     public void animacionTopo(){
         direccionTopo = 1;
-        contadorAnimacion = 0;
-        animacion = new Timeline(
+        contadorAnimacionTopo = 0;
+        animacionTopo = new Timeline(
                   new KeyFrame(Duration.seconds(0.017), (ActionEvent ae) -> {
                         ejecutarAnimacionTopo();
                   })
         );
-        animacion.setCycleCount(Timeline.INDEFINITE); // DEFINIR QUE SE EJECUTE INDEFINIDAMENTE
-        animacion.play(); // EJECUTAR EL TIMELINE
+        animacionTopo.setCycleCount(Timeline.INDEFINITE); // DEFINIR QUE SE EJECUTE INDEFINIDAMENTE
+        animacionTopo.play(); // EJECUTAR EL TIMELINE
+    }
+    public void animacionBomba(){
+        direccionBomba = 1;
+        contadorAnimacionBomba = 0;
+        animacionBomba = new Timeline(
+                  new KeyFrame(Duration.seconds(0.017), (ActionEvent ae) -> {
+                        ejecutarAnimacionBomba();
+                  })
+        );
+        animacionBomba.setCycleCount(Timeline.INDEFINITE); // DEFINIR QUE SE EJECUTE INDEFINIDAMENTE
+        animacionBomba.play(); // EJECUTAR EL TIMELINE
     }
     public void ejecutarAnimacionTopo(){
-        contadorAnimacion++;
-        if (contadorAnimacion==limite2AnimacionTopo)
+        contadorAnimacionTopo++;
+        if (contadorAnimacionTopo==limite2AnimacionTopo)
         {
             direccionTopo = 0;
-            animacion.stop();
+            animacionTopo.stop();
         }
-        if (contadorAnimacion==limite1AnimacionTopo)
+        if (contadorAnimacionTopo==limite1AnimacionTopo)
         {
             direccionTopo = -1;
         }
@@ -273,6 +322,29 @@ public class LogicaGrafica {
         {
             topoPosY = topoPosY + velocidadTopo;
             topo.setLayoutY(topoPosY);
+        }
+    }
+    
+    public void ejecutarAnimacionBomba(){
+        contadorAnimacionBomba++;
+        if (contadorAnimacionBomba==limite2AnimacionBomba)
+        {
+            direccionBomba = 0;
+            animacionBomba.stop();
+        }
+        if (contadorAnimacionBomba==limite1AnimacionBomba)
+        {
+            direccionBomba = -1;
+        }
+        if (direccionBomba == 1)
+        {
+            bombaPosY = bombaPosY - velocidadBomba;
+            bomba.setLayoutY(bombaPosY);
+        }
+        if (direccionBomba == -1)
+        {
+            bombaPosY = bombaPosY + velocidadBomba;
+            bomba.setLayoutY(bombaPosY);
         }
     }
     
@@ -316,6 +388,47 @@ public class LogicaGrafica {
             System.out.println("te cambio la Y a: "+topoPosY);
         }
         animacionTopo();
+    }
+    
+    public void changeBombaImgPosition(){
+        int posicionXBomba = logicaInterna.obtenerPosicionBomba()[0];
+        int posicionYBomba = logicaInterna.obtenerPosicionBomba()[1];
+        if(posicionXBomba==0){
+            bombaPosX = 30;
+            bomba.setLayoutX(bombaPosX);
+            System.out.println("te cambio la X  de la bomba a: "+bombaPosX);
+        }
+        if(posicionXBomba==1){
+            bombaPosX = 155;
+            bomba.setLayoutX(bombaPosX);
+            System.out.println("te cambio X de la bomba a: "+bombaPosX);
+        }
+        if(posicionXBomba==2){
+            bombaPosX = 285;
+            bomba.setLayoutX(bombaPosX);
+            System.out.println("te cambio la X de la bomba a: "+bombaPosX);
+        }
+        if(posicionYBomba==0){
+            bombaPosY = 250;
+            bomba.setLayoutY(bombaPosY);
+            System.out.println("te cambio la Y de la bomba a: "+bombaPosY);
+        }
+        if(posicionYBomba==1){
+            bombaPosY = 340;
+            bomba.setLayoutY(bombaPosY);
+            System.out.println("te cambio la Y de la bomba a: "+bombaPosY);
+        }
+        if(posicionYBomba==2){
+            bombaPosY = 430;
+            bomba.setLayoutY(bombaPosY);
+            System.out.println("te cambio la Y  de la bomba a: "+bombaPosY);
+        }
+        if(posicionYBomba==3){
+            bombaPosY = 525;
+            bomba.setLayoutY(bombaPosY);
+            System.out.println("te cambio la Y de la bomba a: "+bombaPosY);
+        }
+        animacionBomba();
     }
     
     
