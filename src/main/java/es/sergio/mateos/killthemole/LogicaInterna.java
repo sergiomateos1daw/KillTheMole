@@ -6,6 +6,7 @@ public class LogicaInterna {
     char[][] tablero;
     final char JUGADOR1 = 'T';
     final char BOMBA = 'B';
+    final char TOPO_DORADO = 'D';
     final char VACIO = '.';
     int posColumna = 0;
     int posFila = 0;
@@ -14,6 +15,22 @@ public class LogicaInterna {
     int posicionYTopo = 0;
     int posicionXBomba = 0;
     int posicionYBomba = 0;
+    int posicionXTopoDorado = 0;
+    int posicionYTopoDorado = 0;
+    int puntos = 0;
+    
+    public void reinicioPartida(){
+        posColumna = 0;
+        posFila = 0;
+        colocado = true;
+        posicionXTopo = 0;
+        posicionYTopo = 0;
+        posicionXBomba = 0;
+        posicionYBomba = 0;
+        posicionXTopoDorado = 0;
+        posicionYTopoDorado = 0;
+        puntos = 0;
+    }
     
     //Método constructor
     public LogicaInterna(){
@@ -71,6 +88,9 @@ public class LogicaInterna {
             case 3:
                 tablero[columna][fila] = BOMBA;
                 break;
+            case 4:
+                tablero[columna][fila] = TOPO_DORADO;
+                break;
         }
             return true;
         } else {
@@ -121,6 +141,24 @@ public class LogicaInterna {
         }
         return (posBombArr);
     }
+    
+    public int[] obtenerPosicionTopoDorado(){
+        int[] posTopoDoradoArr = new int[2];
+        for(int x=0;x<tamXTablero;x++){
+            for(int y=0;y<tamYTablero;y++){
+                if(tablero[x][y]==TOPO_DORADO){
+                    posTopoDoradoArr[0]=x;
+                    posTopoDoradoArr[1]=y;
+                    System.out.println("La posicion x almacenada es: "+x);
+                    System.out.println("La posicion y almacenada es: "+y);
+                    posicionXTopoDorado = posTopoDoradoArr[0];
+                    posicionYTopoDorado = posTopoDoradoArr[1];
+                }
+            }
+        }
+        return (posTopoDoradoArr);
+    }
+    
     
 }
 
