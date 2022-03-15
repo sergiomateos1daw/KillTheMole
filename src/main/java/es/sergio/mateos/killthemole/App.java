@@ -28,13 +28,15 @@ public class App extends Application {
         
         LogicaInterna logicaInterna = new LogicaInterna((short)3,(short)4);
         LogicaGrafica logicaGrafica = new LogicaGrafica();
+        HomeScreen homeScreen = new HomeScreen();
         
         
-        logicaGrafica.dibujarPradera(root, scene, logicaInterna, logicaGrafica);
-        logicaGrafica.scrollCielo();
-        logicaGrafica.generarTopo();
-        logicaGrafica.generarBomba();
-        logicaGrafica.generarTopoDorado();
+//        logicaGrafica.dibujarPradera(root, scene, logicaInterna, logicaGrafica);
+//        logicaGrafica.scrollCielo();
+//        logicaGrafica.generarTopo();
+//        logicaGrafica.generarBomba();
+//        logicaGrafica.generarTopoDorado();
+        homeScreen.creacionPosterTitulo(root, scene, logicaInterna, logicaGrafica);
     }
     
     

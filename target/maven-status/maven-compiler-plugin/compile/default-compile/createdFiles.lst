@@ -1,3 +1,6 @@
 es\sergio\mateos\killthemole\App.class
+es\sergio\mateos\killthemole\LogicaGrafica.class
 module-info.class
 es\sergio\mateos\killthemole\TextsAndAlerts.class
+es\sergio\mateos\killthemole\LogicaInterna.class
+es\sergio\mateos\killthemole\HomeScreen.class
