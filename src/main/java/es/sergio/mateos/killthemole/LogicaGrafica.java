@@ -15,6 +15,7 @@ public class LogicaGrafica {
     
     LogicaInterna logicaInterna;
     LogicaGrafica logicaGrafica;
+    UserRegister userRegister;
     
     
     //CONSTANTES//
@@ -94,12 +95,12 @@ public class LogicaGrafica {
     int direccionTopo = 0;
     int direccionBomba = 0;
     int direccionTopoDorado = 0;
-//    double velocidadTopo = 2;
-//    double limite1AnimacionTopo = 15;
-//    double limite2AnimacionTopo = 35;
-    double velocidadTopo = 1;
-    double limite1AnimacionTopo = velocidadTopo * 30;
-    double limite2AnimacionTopo = velocidadTopo * 70;
+    double velocidadTopo = 2;
+    double limite1AnimacionTopo = 15;
+    double limite2AnimacionTopo = 35;
+//    double velocidadTopo = 1;
+//    double limite1AnimacionTopo = velocidadTopo * 30;
+//    double limite2AnimacionTopo = velocidadTopo * 70;
     double velocidadBomba = 1;
     double limite1AnimacionBomba = velocidadBomba * 30;
     double limite2AnimacionBomba = velocidadBomba * 70;
@@ -171,9 +172,10 @@ public class LogicaGrafica {
         velocidadAparicionBomba = 10;
         cambiarCursor = false;
     }
-    public void dibujarPradera(Pane root, Scene scene, LogicaInterna logicaInterna, LogicaGrafica logicaGrafica){
+    public void dibujarPradera(Pane root, Scene scene, LogicaInterna logicaInterna, LogicaGrafica logicaGrafica,UserRegister userRegister){
         this.logicaInterna = logicaInterna;
         this.logicaGrafica = logicaGrafica;
+        this.userRegister = userRegister;
         Image cieloImg = new Image(getClass().getResourceAsStream("/images/cielo.png")); // CARGA LA IMAGEN DE FONDO
         Image praderaImg = new Image(getClass().getResourceAsStream("/images/pradera.png")); // CARGA LA IMAGEN DE FONDO
         Image topoImg = new Image(getClass().getResourceAsStream("/images/topo.png")); // CARGA LA IMAGEN DEL TOPO
@@ -285,8 +287,14 @@ public class LogicaGrafica {
         bomba.setOnMousePressed((MouseEvent mouseEvent) -> {
             if(permitirPulsacionBomba==true){
                 System.out.println("Has explotado una bomba");
+                if(logicaInterna.puntos > userRegister.recordActual){
+                    userRegister.writeFileRecord();
+                    userRegister.writeFileUsuario();
+                    System.out.println("Record Actualizado");
+                }
                 textsAndAlerts.mostrarAlertInfo();
                 permitirPulsacionBomba = false;
+                
             }
         });
         topoDorado.setOnMousePressed((MouseEvent mouseEvent) -> {
