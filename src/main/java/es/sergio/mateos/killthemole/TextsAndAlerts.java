@@ -17,6 +17,7 @@ import javafx.scene.text.FontWeight;
  * @author Sergio
  */
 public class TextsAndAlerts {
+    boolean depuracion = false;
     LogicaInterna logicaInterna;
     LogicaGrafica logicaGrafica;
     Label labelPuntos; // AÑADIMOS EL OBJETO LABELPUNTOS
@@ -43,12 +44,17 @@ public class TextsAndAlerts {
     
     
     public void actualizarLabelPuntos(){ // ESTE METODO ACTUALIZA EL LABEL DE PUTNOS QUE SE MUESTRA EN LA PANTALLA DURANTE LA PARTIDA
-        System.out.println(logicaInterna.puntos);
+        if(depuracion==true){
+            System.out.println("Se actualiza el label de puntos");
+        }
         labelPuntos.setText(""); // PRIMERO BORRAMOS EL TEXTO QUE YA SE ESTABA MOSTRANDO
         labelPuntos.setText(""+logicaInterna.puntos); // Y ESCRIBIMOS EL TEXTO NUEVO, CON LA PUNTUACION ACTUALIZADA
     }
     
     public void mostrarAlertInfo() {
+        if(depuracion==true){
+            System.out.println("Se crea el alert de reinicio");
+        }
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.getButtonTypes().clear();
         alert.getButtonTypes().addAll(jugarOtra, salir);
@@ -59,13 +65,19 @@ public class TextsAndAlerts {
         alert.setContentText("Has conseguido "+logicaInterna.puntos+" punto/s");
         Optional<ButtonType> option = alert.showAndWait();
         if (option.get() == null) {
-            System.out.println("No se ha seleccionado nada");
+            if(depuracion==true){
+                System.out.println("No se ha seleccionado ninguna opción");
+            }
         } else if (option.get() == jugarOtra) {
-            System.out.println("Jugaremos otra partida");
+            if(depuracion==true){
+                System.out.println("Se va a jugar otra partida");
+            }
             logicaInterna.reinicioPartida();
             actualizarLabelPuntos();
         } else if (option.get() == salir) {
-            System.out.println("Salir de la partida");
+            if(depuracion==true){
+                System.out.println("Se va a salir del juego");
+            }
             System.exit(0);
         }
     }

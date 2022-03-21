@@ -19,9 +19,12 @@ public class UserRegister {
     String usuarioActual = ""; // ALMACENA EL NOMBRE DEL USUARIO QUE ESTA JUGANDO DURANTE LA EJECUCION DEL JUEGO
     int recordActual = 0;
     String usuarioRecord = "";
+    boolean depuracion = false;
     
     public void registroNombre(LogicaInterna logicaInterna){ // ESTE METODO LANZA UNA PEQUEÑA VENTANA PARA QUE EL USUARIO INTRODUZCA SU NOMBRE ANTES DE QUE COMIENZE A JUGAR
-        
+        if(depuracion==true){
+            System.out.println("Se genera el TextInput para el registro del nombre");
+        }
         this.logicaInterna = logicaInterna;
         TextInputDialog dialog = new TextInputDialog("");
         dialog.setGraphic(note);
@@ -36,6 +39,9 @@ public class UserRegister {
     }
     public void writeFileRecord() // ESTE METODO ALMACENA EL NUMERO DE PUTNOS QUE SE HAN OBTENIDO, SIEMPRE Y CUANDO SE SUPERE EL RECORD ANTERIOR
     {
+        if(depuracion==true){
+            System.out.println("Se almacena la puntuación conseguida en el fichero de record");
+        }
         FileWriter fichero = null;
         PrintWriter pw = null;
         try
@@ -60,6 +66,9 @@ public class UserRegister {
     }
     public void writeFileUsuario()// ESTE METODO ALMACENA EL NOMBRE DEL JUGADOR ACTUAL EN EL FICHERO DE USUARIORECORD, SIEMPRE Y CUANDO SE SUPERE EL RECORD ANTERIOR
     {
+        if(depuracion==true){
+            System.out.println("Se almacena el nombre de usuario en el fichero de 'UsuarioRecord");
+        }
         FileWriter fichero = null;
         PrintWriter pw = null;
         try

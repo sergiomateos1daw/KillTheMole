@@ -77,7 +77,6 @@ public class LogicaGrafica {
     ImageView fondoScore;
     ImageView explosion;
     
-//    Label labelPuntos; // AÑADIMOS EL OBJETO LABELPUNTOS
     
     // VARIABLES //
     double cielo1PosX = 0;
@@ -92,24 +91,21 @@ public class LogicaGrafica {
     double fondoScorePosY = 10;
     double explosionPosX = -100;
     double explosionPosY = -100;
-    int direccionTopo = 0;
-    int direccionBomba = 0;
-    int direccionTopoDorado = 0;
-    double velocidadTopo = 2;
-    double limite1AnimacionTopo = 15;
-    double limite2AnimacionTopo = 35;
-//    double velocidadTopo = 1;
-//    double limite1AnimacionTopo = velocidadTopo * 30;
-//    double limite2AnimacionTopo = velocidadTopo * 70;
+    byte direccionTopo = 0;
+    byte direccionBomba = 0;
+    byte direccionTopoDorado = 0;
+    byte velocidadTopo = 1;
+    double limite1AnimacionTopo = velocidadTopo * 30;
+    double limite2AnimacionTopo = velocidadTopo * 70;
     double velocidadBomba = 1;
     double limite1AnimacionBomba = velocidadBomba * 30;
     double limite2AnimacionBomba = velocidadBomba * 70;
     double velocidadTopoDorado = 1;
     double limite1AnimacionTopoDorado = velocidadTopoDorado * 30;
     double limite2AnimacionTopoDorado = velocidadTopoDorado * 70;
-    int contadorAnimacionTopo=0;
-    int contadorAnimacionBomba=0;
-    int contadorAnimacionTopoDorado=0;
+    byte contadorAnimacionTopo=0;
+    byte contadorAnimacionBomba=0;
+    byte contadorAnimacionTopoDorado=0;
     boolean permitirPulsacionTopo = true;
     boolean permitirPulsacionBomba = true;
     boolean permitirPulsacionTopoDorado = true;
@@ -122,8 +118,9 @@ public class LogicaGrafica {
     int posFilaBomba = 0;
     int posColumnaTopoDorado = 0;
     int posFilaTopoDorado = 0;
-    double velocidadAparicionBomba = 10;
+    double velocidadAparicionBomba = 6;
     boolean cambiarCursor = false;
+    boolean depuracion = false;
     
     Timeline animacionTopo;
     Timeline animacionBomba;
@@ -169,8 +166,11 @@ public class LogicaGrafica {
         posFilaBomba = 0;
         posColumnaTopoDorado = 0;
         posFilaTopoDorado = 0;
-        velocidadAparicionBomba = 10;
+        velocidadAparicionBomba = 6;
         cambiarCursor = false;
+        if(depuracion==true){
+            System.out.println("Reinicio completado con exito");
+        }
     }
     public void dibujarPradera(Pane root, Scene scene, LogicaInterna logicaInterna, LogicaGrafica logicaGrafica,UserRegister userRegister){
         this.logicaInterna = logicaInterna;
@@ -280,17 +280,24 @@ public class LogicaGrafica {
             if(permitirPulsacionTopo==true){
                 logicaInterna.puntos++;
                 textsAndAlerts.actualizarLabelPuntos();
-                System.out.println("Has conseguido un punto, total: "+logicaInterna.puntos);
+                if(depuracion==true){
+                    System.out.println("Has golpeado un topo");
+                    System.out.println("Has conseguido un punto, total: "+logicaInterna.puntos);
+                }
                 permitirPulsacionTopo = false;
             }
         });
         bomba.setOnMousePressed((MouseEvent mouseEvent) -> {
             if(permitirPulsacionBomba==true){
-                System.out.println("Has explotado una bomba");
+                if(depuracion==true){
+                    System.out.println("Has explotado una bomba");
+                }
                 if(logicaInterna.puntos > userRegister.recordActual){
                     userRegister.writeFileRecord();
                     userRegister.writeFileUsuario();
-                    System.out.println("Record Actualizado");
+                    if(depuracion==true){
+                        System.out.println("Record Actualizado");
+                    }
                 }
                 textsAndAlerts.mostrarAlertInfo();
                 permitirPulsacionBomba = false;
@@ -301,7 +308,10 @@ public class LogicaGrafica {
             if(permitirPulsacionTopoDorado==true){
                 logicaInterna.puntos = logicaInterna.puntos+5;
                 textsAndAlerts.actualizarLabelPuntos();
-                System.out.println("Has conseguido un punto, total: "+logicaInterna.puntos);
+                if(depuracion==true){
+                    System.out.println("Has golpeado un topo dorado");
+                    System.out.println("Has conseguido un punto, total: "+logicaInterna.puntos);
+                }
                 permitirPulsacionTopoDorado = false;
             }
         });
@@ -330,13 +340,16 @@ public class LogicaGrafica {
     public void generarTopo(){
         Timeline generarTopo = new Timeline(
                   new KeyFrame(Duration.seconds(2), (ActionEvent ae) -> {
-                        colocadoTopo = logicaInterna.colocarFicha(posColumnaTopo, posFilaTopo, 2);
+                        colocadoTopo = logicaInterna.colocarObjeto(posColumnaTopo, posFilaTopo, 2);
                         posColumnaTopo = (int) (Math.random() * (3 -0)) + 0;
                         posFilaTopo = (int) (Math.random() * (4 -0)) + 0;
-                        colocadoTopo = logicaInterna.colocarFicha(posColumnaTopo, posFilaTopo, 1);
+                        colocadoTopo = logicaInterna.colocarObjeto(posColumnaTopo, posFilaTopo, 1);
                         if(colocadoTopo == true) {
                             logicaInterna.mostrarTableroConsola();
                             changeMoleImgPosition();
+                            if(depuracion==true){
+                                System.out.println("La posicion del topo ha cambiado a: X-> "+posColumnaTopo+" Y-> "+posFilaTopo);
+                            }
                             permitirPulsacionTopo = true;
                         }
                   })
@@ -348,17 +361,20 @@ public class LogicaGrafica {
     public void generarBomba(){
         Timeline generarBombaTimeline = new Timeline(
                   new KeyFrame(Duration.seconds(velocidadAparicionBomba), (ActionEvent ae) -> {
-                        if(velocidadAparicionBomba>0.5){
-                            velocidadAparicionBomba -= 0.5;
+                        if(velocidadAparicionBomba>1){
+                            velocidadAparicionBomba -= 0.3;
                         }
-                        colocadoBomba = logicaInterna.colocarFicha(posColumnaBomba, posFilaBomba, 2);
+                        colocadoBomba = logicaInterna.colocarObjeto(posColumnaBomba, posFilaBomba, 2);
                         posColumnaBomba = (int) (Math.random() * (3 -0)) + 0;
                         posFilaBomba = (int) (Math.random() * (4 -0)) + 0;
-                        colocadoBomba = logicaInterna.colocarFicha(posColumnaBomba, posFilaBomba, 3);
+                        colocadoBomba = logicaInterna.colocarObjeto(posColumnaBomba, posFilaBomba, 3);
                         if(colocadoBomba == true) {
                             logicaInterna.mostrarTableroConsola();
                             changeBombaImgPosition();
-                            System.out.println("LA VELOCIDAD DE LA BOMBA ES "+velocidadAparicionBomba);
+                            if(depuracion==true){
+                                System.out.println("la posicion de la bomba ha cambiado a: X-> "+posColumnaBomba+" Y-> "+posFilaBomba);
+                                System.out.println("El ciclo de aparicion de la bomba es cada "+velocidadAparicionBomba+" segundos");
+                            }
                             permitirPulsacionBomba = true;
                         }
                         generarBomba();
@@ -372,13 +388,16 @@ public class LogicaGrafica {
         Timeline generarTopoDorado = new Timeline(
                   new KeyFrame(Duration.seconds(15), (ActionEvent ae) -> {
                         
-                        colocadoTopoDorado = logicaInterna.colocarFicha(posColumnaTopoDorado, posFilaTopoDorado, 2);
+                        colocadoTopoDorado = logicaInterna.colocarObjeto(posColumnaTopoDorado, posFilaTopoDorado, 2);
                         posColumnaTopoDorado = (int) (Math.random() * (3 -0)) + 0;
                         posFilaTopoDorado = (int) (Math.random() * (4 -0)) + 0;
-                        colocadoTopoDorado = logicaInterna.colocarFicha(posColumnaTopoDorado, posFilaTopoDorado, 4);
+                        colocadoTopoDorado = logicaInterna.colocarObjeto(posColumnaTopoDorado, posFilaTopoDorado, 4);
                         if(colocadoTopoDorado == true) {
                             logicaInterna.mostrarTableroConsola();
                             changeTopoDoradoImgPosition();
+                            if(depuracion==true){
+                                System.out.println("La posicion del topo dorado ha cambiado a: X-> "+posColumnaTopoDorado+" Y-> "+posFilaTopoDorado);
+                            }
                             permitirPulsacionTopoDorado = true;
                         }
                   })
@@ -388,6 +407,9 @@ public class LogicaGrafica {
     }
     
     public void animacionTopo(){
+        if(depuracion==true){
+            System.out.println("Ejecutando animación del topo");
+        }
         direccionTopo = 1;
         contadorAnimacionTopo = 0;
         animacionTopo = new Timeline(
@@ -399,6 +421,9 @@ public class LogicaGrafica {
         animacionTopo.play(); // EJECUTAR EL TIMELINE
     }
     public void animacionBomba(){
+        if(depuracion==true){
+            System.out.println("Ejecutando animación de la bomba");
+        }
         direccionBomba = 1;
         contadorAnimacionBomba = 0;
         animacionBomba = new Timeline(
@@ -410,6 +435,9 @@ public class LogicaGrafica {
         animacionBomba.play(); // EJECUTAR EL TIMELINE
     }
     public void animacionTopoDorado(){
+        if(depuracion==true){
+            System.out.println("Ejecutando animación del topo dorado");
+        }
         direccionTopoDorado = 1;
         contadorAnimacionTopoDorado = 0;
         animacionTopoDorado = new Timeline(
@@ -495,37 +523,51 @@ public class LogicaGrafica {
         if(posicionXTopo==0){
             topoPosX = 30;
             topo.setLayoutX(topoPosX);
-            System.out.println("te cambio la X a: "+topoPosX);
+            if(depuracion==true){
+                System.out.println("Se cambia la X de la imagen del topo a: "+ topoPosX);
+            }
         }
         if(posicionXTopo==1){
             topoPosX = 155;
             topo.setLayoutX(topoPosX);
-            System.out.println("te cambio la X a: "+topoPosX);
+            if(depuracion==true){
+                System.out.println("Se cambia la X de la imagen del topo a: "+ topoPosX);
+            }
         }
         if(posicionXTopo==2){
             topoPosX = 285;
             topo.setLayoutX(topoPosX);
-            System.out.println("te cambio la X a: "+topoPosX);
+            if(depuracion==true){
+                System.out.println("Se cambia la X de la imagen del topo a: "+ topoPosX);
+            }
         }
         if(posicionYTopo==0){
             topoPosY = 250;
             topo.setLayoutY(topoPosY);
-            System.out.println("te cambio la Y a: "+topoPosY);
+            if(depuracion==true){
+                System.out.println("Se cambia la Y de la imagen del topo a: "+ topoPosY);
+            }
         }
         if(posicionYTopo==1){
             topoPosY = 340;
             topo.setLayoutY(topoPosY);
-            System.out.println("te cambio la Y a: "+topoPosY);
+            if(depuracion==true){
+                System.out.println("Se cambia la Y de la imagen del topo a: "+ topoPosY);
+            }
         }
         if(posicionYTopo==2){
             topoPosY = 430;
             topo.setLayoutY(topoPosY);
-            System.out.println("te cambio la Y a: "+topoPosY);
+            if(depuracion==true){
+                System.out.println("Se cambia la Y de la imagen del topo a: "+ topoPosY);
+            }
         }
         if(posicionYTopo==3){
             topoPosY = 525;
             topo.setLayoutY(topoPosY);
-            System.out.println("te cambio la Y a: "+topoPosY);
+            if(depuracion==true){
+                System.out.println("Se cambia la Y de la imagen del topo a: "+ topoPosY);
+            }
         }
         animacionTopo();
     }
@@ -536,37 +578,51 @@ public class LogicaGrafica {
         if(posicionXBomba==0){
             bombaPosX = 30;
             bomba.setLayoutX(bombaPosX);
-            System.out.println("te cambio la X  de la bomba a: "+bombaPosX);
+            if(depuracion==true){
+                System.out.println("Se cambia la X de la imagen de la bomba a: "+ bombaPosX);
+            }
         }
         if(posicionXBomba==1){
             bombaPosX = 155;
             bomba.setLayoutX(bombaPosX);
-            System.out.println("te cambio X de la bomba a: "+bombaPosX);
+            if(depuracion==true){
+                System.out.println("Se cambia la X de la imagen de la bomba a: "+ bombaPosX);
+            }
         }
         if(posicionXBomba==2){
             bombaPosX = 285;
             bomba.setLayoutX(bombaPosX);
-            System.out.println("te cambio la X de la bomba a: "+bombaPosX);
+            if(depuracion==true){
+                System.out.println("Se cambia la X de la imagen de la bomba a: "+ bombaPosX);
+            }
         }
         if(posicionYBomba==0){
             bombaPosY = 250;
             bomba.setLayoutY(bombaPosY);
-            System.out.println("te cambio la Y de la bomba a: "+bombaPosY);
+            if(depuracion==true){
+                System.out.println("Se cambia la Y de la imagen de la bomba a: "+ bombaPosY);
+            }
         }
         if(posicionYBomba==1){
             bombaPosY = 340;
             bomba.setLayoutY(bombaPosY);
-            System.out.println("te cambio la Y de la bomba a: "+bombaPosY);
+            if(depuracion==true){
+                System.out.println("Se cambia la Y de la imagen de la bomba a: "+ bombaPosY);
+            }
         }
         if(posicionYBomba==2){
             bombaPosY = 430;
             bomba.setLayoutY(bombaPosY);
-            System.out.println("te cambio la Y  de la bomba a: "+bombaPosY);
+            if(depuracion==true){
+                System.out.println("Se cambia la Y de la imagen de la bomba a: "+ bombaPosY);
+            }
         }
         if(posicionYBomba==3){
             bombaPosY = 525;
             bomba.setLayoutY(bombaPosY);
-            System.out.println("te cambio la Y de la bomba a: "+bombaPosY);
+            if(depuracion==true){
+                System.out.println("Se cambia la Y de la imagen de la bomba a: "+ bombaPosY);
+            }
         }
         animacionBomba();
     }
@@ -577,37 +633,51 @@ public class LogicaGrafica {
         if(posicionXTopoDorado==0){
             topoDoradoPosX = 40;
             topoDorado.setLayoutX(topoDoradoPosX);
-            System.out.println("te cambio la X del topo dorado a: "+topoDoradoPosX);
+            if(depuracion==true){
+                System.out.println("Se cambia la X de la imagen del topo dorado a: "+ topoDoradoPosX);
+            }
         }
         if(posicionXTopoDorado==1){
             topoDoradoPosX = 165;
             topoDorado.setLayoutX(topoDoradoPosX);
-            System.out.println("te cambio la X del topo dorado a: "+topoDoradoPosX);
+            if(depuracion==true){
+                System.out.println("Se cambia la X de la imagen del topo dorado a: "+ topoDoradoPosX);
+            }
         }
         if(posicionXTopoDorado==2){
             topoDoradoPosX = 295;
             topoDorado.setLayoutX(topoDoradoPosX);
-            System.out.println("te cambio la X del topo dorado a: "+topoDoradoPosX);
+            if(depuracion==true){
+                System.out.println("Se cambia la X de la imagen del topo dorado a: "+ topoDoradoPosX);
+            }
         }
         if(posicionYTopoDorado==0){
             topoDoradoPosY = 250;
             topoDorado.setLayoutY(topoDoradoPosY);
-            System.out.println("te cambio la Y del topo dorado a: "+topoDoradoPosY);
+            if(depuracion==true){
+                System.out.println("Se cambia la Y de la imagen del topo dorado a: "+ topoDoradoPosY);
+            }
         }
         if(posicionYTopoDorado==1){
             topoDoradoPosY = 340;
             topoDorado.setLayoutY(topoDoradoPosY);
-            System.out.println("te cambio la Y del topo dorado a: "+topoDoradoPosY);
+            if(depuracion==true){
+                System.out.println("Se cambia la Y de la imagen del topo dorado a: "+ topoDoradoPosY);
+            }
         }
         if(posicionYTopoDorado==2){
             topoDoradoPosY = 430;
             topoDorado.setLayoutY(topoDoradoPosY);
-            System.out.println("te cambio la Y del topo dorado a: "+topoDoradoPosY);
+            if(depuracion==true){
+                System.out.println("Se cambia la Y de la imagen del topo dorado a: "+ topoDoradoPosY);
+            }
         }
         if(posicionYTopoDorado==3){
             topoDoradoPosY = 525;
             topoDorado.setLayoutY(topoDoradoPosY);
-            System.out.println("te cambio la Y del topo dorado a: "+topoDoradoPosY);
+            if(depuracion==true){
+                System.out.println("Se cambia la Y de la imagen del topo dorado a: "+ topoDoradoPosY);
+            }
         }
         animacionTopoDorado();
     }

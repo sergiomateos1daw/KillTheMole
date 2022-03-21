@@ -14,22 +14,23 @@ public class App extends Application {
         
         Pane root = new Pane();
         
-        short tamXPantalla = 400;
-        short tamYPantalla = 600;
+        short tamXPantalla = 400; // Esto es el tamaño X de la pantalla
+        short tamYPantalla = 600; // Esto es el tamaño Y de la pantalla
         
-        var scene = new Scene(root, tamXPantalla, tamYPantalla);
+        var scene = new Scene(root, tamXPantalla, tamYPantalla); // Con esto creamos el scene del juego
         stage.setScene(scene);
         stage.show();
         stage.setResizable(false); // BLOQUEAR REESCALADO DE LA VENTANA
-        Image image = new Image("/images/mazo0.png");  //pass in the image path
-        scene.setCursor(new ImageCursor(image));
+        Image image = new Image("/images/mazo0.png");  // Carga la imagen del mouse
+        stage.getIcons().add(new Image("/images/topo.png")); // AÑADIMOS EL ICONO A LA VENTANA
+        scene.setCursor(new ImageCursor(image)); // Aplica la imagen cargada anteriormente
         
-        LogicaInterna logicaInterna = new LogicaInterna((short)3,(short)4);
-        LogicaGrafica logicaGrafica = new LogicaGrafica();
-        UserRegister userRegister = new UserRegister();
-        HomeScreen homeScreen = new HomeScreen();
+        LogicaInterna logicaInterna = new LogicaInterna((short)3,(short)4); // LLama a la clase LogicaInterna
+        LogicaGrafica logicaGrafica = new LogicaGrafica(); // LLama a la clase LogicaGrafica
+        UserRegister userRegister = new UserRegister(); // LLama a la clase UserRegister
+        HomeScreen homeScreen = new HomeScreen(); // LLama a la clase HomeScreen
         
-        homeScreen.creacionPosterTitulo(root, scene, logicaInterna, logicaGrafica, userRegister);
+        homeScreen.creacionPosterTitulo(root, scene, logicaInterna, logicaGrafica, userRegister); // Llama a un método de la clase HomeScreen y le pasamos una serie de parámetros que va a usar posteriormente
     }
     
     

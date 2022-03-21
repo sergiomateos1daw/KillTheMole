@@ -4,7 +4,6 @@ import java.io.IOException;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
-import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -47,6 +46,9 @@ public class HomeScreen {
     Timeline comprobarAnimaciones;
     
     // VARIABLES //
+    
+    boolean depuracion = false;
+    
     double cieloScreen1PosX = 0;
     double cieloScreen2PosX = 400;
     double posterTituloPosX = 0;
@@ -68,43 +70,43 @@ public class HomeScreen {
         this.userRegister = userRegister;
         
         Image cieloScreenImg = new Image(getClass().getResourceAsStream("/images/cieloScreen.png")); // CARGA LA IMAGEN DE FONDO
-        Image posterTituloImg = new Image(getClass().getResourceAsStream("/images/imageTitle.png")); // CARGA LA IMAGEN DE FONDO
-        Image botonStartImg = new Image(getClass().getResourceAsStream("/images/botonStart.png")); // CARGA LA IMAGEN DE FONDO
-        Image botonExitImg = new Image(getClass().getResourceAsStream("/images/botonExit.png")); // CARGA LA IMAGEN DE FONDO
-        Image botonPlayImg = new Image(getClass().getResourceAsStream("/images/botonPlay.png")); // CARGA LA IMAGEN DE FONDO
-        Image posterGrandeImg = new Image(getClass().getResourceAsStream("/images/tablonGrande.png")); // CARGA LA IMAGEN DE FONDO
+        Image posterTituloImg = new Image(getClass().getResourceAsStream("/images/imageTitle.png")); // CARGA LA IMAGEN DEL POSTER DEL TITULO
+        Image botonStartImg = new Image(getClass().getResourceAsStream("/images/botonStart.png")); // CARGA LA IMAGEN DEL BOTON START
+        Image botonExitImg = new Image(getClass().getResourceAsStream("/images/botonExit.png")); // CARGA LA IMAGEN DEL BOTON EXIT
+        Image botonPlayImg = new Image(getClass().getResourceAsStream("/images/botonPlay.png")); // CARGA LA IMAGEN DEL BOTON PLAY
+        Image posterGrandeImg = new Image(getClass().getResourceAsStream("/images/tablonGrande.png")); // CARGA LA IMAGEN DEL POSTER GRANDE
         cieloScreen1 = new ImageView(cieloScreenImg); // CREA EL OBJETO cielo1
         cieloScreen2 = new ImageView(cieloScreenImg); // CREA EL OBJETO cielo2
-        posterTitulo = new ImageView(posterTituloImg);
-        botonStart = new ImageView(botonStartImg);
-        botonExit = new ImageView(botonExitImg);
-        botonPlay = new ImageView(botonPlayImg);
-        posterGrande = new ImageView(posterGrandeImg);
-        root.getChildren().add(cieloScreen1);
-        root.getChildren().add(cieloScreen2);
-        root.getChildren().add(posterTitulo);
-        root.getChildren().add(botonStart);
-        root.getChildren().add(botonExit);
-        root.getChildren().add(botonPlay);
-        root.getChildren().add(posterGrande);
-        cieloScreen1.setLayoutX(cieloScreen1PosX);
-        posterTitulo.setLayoutX(posterTituloPosX);
-        posterTitulo.setLayoutY(posterTituloPosY);
-        botonStart.setLayoutX(botonStartPosX);
-        botonStart.setLayoutY(botonStartPosY);
-        botonExit.setLayoutX(botonExitPosX);
-        botonExit.setLayoutY(botonExitPosY);
-        botonPlay.setLayoutX(botonPlayPosX);
-        botonPlay.setLayoutY(botonPlayPosY);
-        posterGrande.setLayoutX(posterGrandePosX);
-        posterGrande.setLayoutY(posterGrandePosY);
+        posterTitulo = new ImageView(posterTituloImg); // CREA EL OBJETO posterTitulo
+        botonStart = new ImageView(botonStartImg); // CREA EL OBJETO botonStart
+        botonExit = new ImageView(botonExitImg); // CREA EL OBJETO botonExit
+        botonPlay = new ImageView(botonPlayImg); // CREA EL OBJETO botonPlay
+        posterGrande = new ImageView(posterGrandeImg); // CREA EL OBJETO posterGrande
+        root.getChildren().add(cieloScreen1); // AÑADE EL OBJETO AL ROOT
+        root.getChildren().add(cieloScreen2); // AÑADE EL OBJETO AL ROOT
+        root.getChildren().add(posterTitulo); // AÑADE EL OBJETO AL ROOT
+        root.getChildren().add(botonStart); // AÑADE EL OBJETO AL ROOT
+        root.getChildren().add(botonExit); // AÑADE EL OBJETO AL ROOT
+        root.getChildren().add(botonPlay); // AÑADE EL OBJETO AL ROOT
+        root.getChildren().add(posterGrande); // AÑADE EL OBJETO AL ROOT
+        cieloScreen1.setLayoutX(cieloScreen1PosX); // ESTABLECEMOS LAS COORDENADAS DEL OBJETO HA LAS ESPECIFICADAS EN EL INICIO DEL PROGRAMA
+        posterTitulo.setLayoutX(posterTituloPosX); // ESTABLECEMOS LAS COORDENADAS DEL OBJETO HA LAS ESPECIFICADAS EN EL INICIO DEL PROGRAMA
+        posterTitulo.setLayoutY(posterTituloPosY); // ESTABLECEMOS LAS COORDENADAS DEL OBJETO HA LAS ESPECIFICADAS EN EL INICIO DEL PROGRAMA
+        botonStart.setLayoutX(botonStartPosX); // ESTABLECEMOS LAS COORDENADAS DEL OBJETO HA LAS ESPECIFICADAS EN EL INICIO DEL PROGRAMA
+        botonStart.setLayoutY(botonStartPosY); // ESTABLECEMOS LAS COORDENADAS DEL OBJETO HA LAS ESPECIFICADAS EN EL INICIO DEL PROGRAMA
+        botonExit.setLayoutX(botonExitPosX); // ESTABLECEMOS LAS COORDENADAS DEL OBJETO HA LAS ESPECIFICADAS EN EL INICIO DEL PROGRAMA
+        botonExit.setLayoutY(botonExitPosY); // ESTABLECEMOS LAS COORDENADAS DEL OBJETO HA LAS ESPECIFICADAS EN EL INICIO DEL PROGRAMA
+        botonPlay.setLayoutX(botonPlayPosX); // ESTABLECEMOS LAS COORDENADAS DEL OBJETO HA LAS ESPECIFICADAS EN EL INICIO DEL PROGRAMA
+        botonPlay.setLayoutY(botonPlayPosY); // ESTABLECEMOS LAS COORDENADAS DEL OBJETO HA LAS ESPECIFICADAS EN EL INICIO DEL PROGRAMA
+        posterGrande.setLayoutX(posterGrandePosX); // ESTABLECEMOS LAS COORDENADAS DEL OBJETO HA LAS ESPECIFICADAS EN EL INICIO DEL PROGRAMA
+        posterGrande.setLayoutY(posterGrandePosY); // ESTABLECEMOS LAS COORDENADAS DEL OBJETO HA LAS ESPECIFICADAS EN EL INICIO DEL PROGRAMA
         
-        userRegister.readFileInt("files/record.txt");
-        userRegister.readFileString("files/usuarioRecord.txt");
+        userRegister.readFileInt("files/record.txt"); // LLAMA AL METODO QUE LEE EL FICHERO QUE ALMACENA LA PUNTUACION RECORD
+        userRegister.readFileString("files/usuarioRecord.txt"); // LLAMA AL METODO QUE LEE EL FICHERO QUE ALMACENA EL NOMBRE DEL JUGADOR QUE TIENE EL RECORD DE PUNTUACION
         
         ///////// CREAMOS EL LABEL DE CREDITOS ////////////
-        labelCreditos = new Label("Developed by Sergio Mateos");
-        Font font = Font.loadFont(getClass().getResourceAsStream("/fonts/go3v2.ttf"), 20);
+        labelCreditos = new Label("Developed by Sergio Mateos"); // CREAMOS UN LABEL PARA LOS CREDITOS DE DESAROLLO
+        Font font = Font.loadFont(getClass().getResourceAsStream("/fonts/go3v2.ttf"), 20); // ESTABLECE ALGUNOS AJUSTES EN EL LABEL DE LOS CREDITOS
         font = Font.font("Gang of Three", FontWeight.BOLD, FontPosture.REGULAR, 20); // ESTABLECEMOS ALGUNAS DE LAS PROPIEDADES DE LA FUENTE DEL TEXTO
         labelCreditos.setFont(font); // CON ESTO LE APLICAMOS LAS POPIEDADES DE LA FUENTE AL TEXTO
         labelCreditos.setTextFill(Color.rgb(65, 45, 42)); // CAMBIA EL COLOR DEL TEXTO A NEGRO
@@ -121,30 +123,40 @@ public class HomeScreen {
         labelRecord.setTranslateY(300); // CAMBIA LAS COORDENADAS Y DEL TEXTO
         root.getChildren().add(labelRecord); // AÑADE EL OBJETO AL ROOT
         /////////////////////////////////////////////////
-        userRegister.registroNombre(logicaInterna);
-        scrollCieloScreen();
-        iniciarPantalla();
-        controlAnimaciones();
-        botonStart.setOnMousePressed((MouseEvent mouseEvent) -> {
-              animacionBajarStart.play();
-              animacionBajarExit.play();
-              animacionQuitarCreditos.play();
+        userRegister.registroNombre(logicaInterna); // LLAMA AL METODO QUE REALIZA EL REGISTRO DEL NOMBRE DEL USUARIO ACTUAL
+        scrollCieloScreen(); // LLAMA AL METODO QUE SE ENCARGA DEL SCROLL DEL FONDO
+        iniciarPantalla(); // LLAMA AL METODO QUE SE ENCARGA DE INICIAR LAS ANIMACIONES DEL MENUI PRINCIPAL
+        controlAnimaciones(); // LLAMA AL METODO QUE CONTROLA LAS ANIMACIONES DEL MENU
+        botonStart.setOnMousePressed((MouseEvent mouseEvent) -> { // CONTROLA LA DETECCION DEL BOTON START
+            if(depuracion==true){
+                System.out.println("Se pulsa el botón Start");
+            }
+            animacionBajarStart.play();
+            animacionBajarExit.play();
+            animacionQuitarCreditos.play();
         });
-        botonExit.setOnMousePressed((MouseEvent mouseEvent) -> {
-            System.out.println("Salir de la partida");
+        botonExit.setOnMousePressed((MouseEvent mouseEvent) -> { // CONTROLA LA DETECCION DEL BOTON EXIT
+            if(depuracion==true){
+                System.out.println("Salir de la partida");
+            }
             System.exit(0);
         });
-        labelCreditos.setOnMousePressed((MouseEvent mouseEvent) -> {
-            System.out.println("Visitando sergiomateosdev.es");
-            String url = "http://sergiomateosdev.es/";
+        labelCreditos.setOnMousePressed((MouseEvent mouseEvent) -> { // CONTROLA LA DETECCION DEL LABEL DE LOS CREDITOS
+            if(depuracion==true){
+                System.out.println("Se pulsa el label Creditos");
+            }
+            if(depuracion==true){
+                System.out.println("Visitando sergiomateosdev.es");
+            }
+            String url = "http://sergiomateosdev.es/"; // CARGA LA URL QUE VA A MOSTRAR EN UNA VARIABLE
             try {
-                Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + url);
+                Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + url); // BUSCA LA URL ALMACENADA EN LA VARIABLE EN LA WEB
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
             
         });
-        botonPlay.setOnMousePressed((MouseEvent mouseEvent) -> {
+        botonPlay.setOnMousePressed((MouseEvent mouseEvent) -> { // CONTROLA LA DETECCION DEL BOTON PLAY
             logicaGrafica.dibujarPradera(root, scene, logicaInterna, logicaGrafica, userRegister);
             logicaGrafica.scrollCielo();
             logicaGrafica.generarTopo();
